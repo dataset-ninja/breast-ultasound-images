@@ -6,4 +6,4 @@ Images in the Breast Ultrasound Images dataset have pixel-level semantic segment
 
 Here are the visualized examples for each of the 1 classes:
 
-[Dataset classes](https://github.com/dataset-ninja/breast-ultasound-images/raw/main/visualizations/classes_preview.webm)
+[Dataset classes](https://github.com/dataset-ninja/breast-ultasound-images/raw/main/visualizations/horizontal_grid.webm)
