@@ -3,11 +3,18 @@ from urllib.parse import unquote, urlparse
 
 import numpy as np
 import supervisely as sly
-from dataset_tools.convert import unpack_if_archive
-from supervisely.io.fs import file_exists, get_file_name, get_file_size
+from dotenv import load_dotenv
+from supervisely.io.fs import (
+    file_exists,
+    get_file_ext,
+    get_file_name,
+    get_file_name_with_ext,
+    get_file_size,
+)
 from tqdm import tqdm
 
 import src.settings as s
+from dataset_tools.convert import unpack_if_archive
 
 
 def download_dataset(teamfiles_dir: str) -> str:
@@ -58,7 +65,8 @@ def download_dataset(teamfiles_dir: str) -> str:
 def convert_and_upload_supervisely_project(
     api: sly.Api, workspace_id: int, project_name: str
 ) -> sly.ProjectInfo:
-    dataset_path = "/Users/iwatkot/Downloads/ninja/datasets/Dataset_BUSI_with_GT"
+    # project_name = "Breast Ultrasound Images"
+    dataset_path = "APP_DATA/Dataset_BUSI_with_GT"
     ds_name = "ds"
     batch_size = 30
 
@@ -82,20 +90,25 @@ def convert_and_upload_supervisely_project(
 
         return sly.Annotation(img_size=(img_height, img_wight), labels=labels)
 
-    obj_class = sly.ObjClass("tumor", sly.Bitmap)
+    obj_benign = sly.ObjClass("benign", sly.Bitmap)
+    obj_malignant = sly.ObjClass("malignant", sly.Bitmap)
+    obj_normal = sly.ObjClass("normal", sly.Bitmap)
+
+    folder_to_class = {"benign": obj_benign, "malignant": obj_malignant, "normal": obj_normal}
 
     project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
-    meta = sly.ProjectMeta(obj_classes=[obj_class])
+    meta = sly.ProjectMeta(obj_classes=[obj_benign, obj_malignant, obj_normal])
     api.project.update_meta(project.id, meta.to_json())
 
-    for ds_name in os.listdir(dataset_path):
-        dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
+    dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
 
-        data_path = os.path.join(dataset_path, ds_name)
+    for class_name in os.listdir(dataset_path):
+        obj_class = folder_to_class[class_name]
+        data_path = os.path.join(dataset_path, class_name)
 
         images_names = [im_name for im_name in os.listdir(data_path) if "mask" not in im_name]
 
-        progress = sly.Progress("Create dataset {}".format(ds_name), len(images_names))
+        progress = sly.Progress("Create dataset {}".format(class_name), len(images_names))
 
         for img_names_batch in sly.batched(images_names, batch_size=batch_size):
             images_pathes_batch = [
@@ -109,3 +122,5 @@ def convert_and_upload_supervisely_project(
             api.annotation.upload_anns(img_ids, anns_batch)
 
             progress.iters_done_report(len(img_names_batch))
+
+    return project

@@ -15,16 +15,16 @@ from dataset_tools.templates import (
 ##################################
 PROJECT_NAME: str = "Breast Ultrasound Images"
 PROJECT_NAME_FULL: str = "Breast Ultrasound Images"
+HIDE_DATASET = False  # set False when 100% sure about repo quality
 
 ##################################
 # * After uploading to instance ##
 ##################################
 LICENSE: License = License.CC0_1_0()
-INDUSTRIES: List[Industry] = [Industry.Medical()]
 APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Medical()]
 CATEGORY: Category = Category.Medical()
 
-CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.ObjectDetection()]
+CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation()]
 ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.SemanticSegmentation()]
 
 RELEASE_DATE: Optional[str] = None  # e.g. "YYYY-MM-DD"
@@ -35,7 +35,7 @@ if RELEASE_DATE is None:
 HOMEPAGE_URL: str = "https://www.kaggle.com/datasets/aryashah2k/breast-ultrasound-images-dataset"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = 1523193
+PREVIEW_IMAGE_ID: int = 2168297
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
 GITHUB_URL: str = "https://github.com/dataset-ninja/breast-ultasound-images"
@@ -86,6 +86,7 @@ def get_settings():
     settings = {
         "project_name": PROJECT_NAME,
         "license": LICENSE,
+        "hide_dataset": HIDE_DATASET,
         "applications": APPLICATIONS,
         "category": CATEGORY,
         "cv_tasks": CV_TASKS,
