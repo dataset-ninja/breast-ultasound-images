@@ -77,38 +77,50 @@ def convert_and_upload_supervisely_project(
 
         image_name = get_file_name(image_path)
         mask_path = os.path.join(data_path, image_name + masks_ext)
+        tag_name = image_path.split("/")[-2]
 
-        if file_exists(mask_path):
-            mask_np = sly.imaging.image.read(mask_path)[:, :, 0]
-            img_height = mask_np.shape[0]
-            img_wight = mask_np.shape[1]
+        mask_np = sly.imaging.image.read(mask_path)[:, :, 0]
+        img_height = mask_np.shape[0]
+        img_wight = mask_np.shape[1]
+
+        if file_exists(mask_path) and tag_name != "normal":
             mask = mask_np == 255
             if len(np.unique(mask)) > 1:  # empty mask
                 curr_bitmap = sly.Bitmap(mask)
                 curr_label = sly.Label(curr_bitmap, obj_class)
                 labels.append(curr_label)
 
-        return sly.Annotation(img_size=(img_height, img_wight), labels=labels)
+        tags = [sly.Tag(tag_meta) for tag_meta in tag_metas if tag_meta.name == tag_name]
+        return sly.Annotation(img_size=(img_height, img_wight), labels=labels, img_tags=tags)
 
     obj_benign = sly.ObjClass("benign", sly.Bitmap)
     obj_malignant = sly.ObjClass("malignant", sly.Bitmap)
-    obj_normal = sly.ObjClass("normal", sly.Bitmap)
+    # obj_normal = sly.ObjClass("normal", sly.Bitmap)
 
-    folder_to_class = {"benign": obj_benign, "malignant": obj_malignant, "normal": obj_normal}
+    folder_to_class = {"benign": obj_benign, "malignant": obj_malignant}
+
+    tag_names = [
+        "benign",
+        "malignant",
+        "normal",
+    ]
+    tag_metas = [sly.TagMeta(name, sly.TagValueType.NONE) for name in tag_names]
+    # {"benign": obj_benign, "malignant": obj_malignant, "normal": obj_normal}
 
     project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
-    meta = sly.ProjectMeta(obj_classes=[obj_benign, obj_malignant, obj_normal])
+    meta = sly.ProjectMeta(obj_classes=[obj_benign, obj_malignant], tag_metas=tag_metas)
     api.project.update_meta(project.id, meta.to_json())
 
     dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
 
+    progress = sly.Progress("Create dataset {}".format(ds_name), 780)
+
     for class_name in os.listdir(dataset_path):
-        obj_class = folder_to_class[class_name]
+        if class_name != "normal":
+            obj_class = folder_to_class[class_name]
         data_path = os.path.join(dataset_path, class_name)
 
         images_names = [im_name for im_name in os.listdir(data_path) if "mask" not in im_name]
-
-        progress = sly.Progress("Create dataset {}".format(class_name), len(images_names))
 
         for img_names_batch in sly.batched(images_names, batch_size=batch_size):
             images_pathes_batch = [

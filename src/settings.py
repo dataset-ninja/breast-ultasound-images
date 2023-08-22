@@ -24,7 +24,7 @@ LICENSE: License = License.CC0_1_0()
 APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Medical()]
 CATEGORY: Category = Category.Medical()
 
-CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation()]
+CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.Classification()]
 ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.SemanticSegmentation()]
 
 RELEASE_DATE: Optional[str] = None  # e.g. "YYYY-MM-DD"
@@ -35,7 +35,7 @@ if RELEASE_DATE is None:
 HOMEPAGE_URL: str = "https://www.kaggle.com/datasets/aryashah2k/breast-ultrasound-images-dataset"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = 2168297
+PREVIEW_IMAGE_ID: int = 2247557
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
 GITHUB_URL: str = "https://github.com/dataset-ninja/breast-ultasound-images"
@@ -64,7 +64,9 @@ AUTHORS: Optional[List[str]] = [
 ORGANIZATION_NAME: Optional[Union[str, List[str]]] = "Cairo University, Egypt"
 ORGANIZATION_URL: Optional[Union[str, List[str]]] = "https://cu.edu.eg/Home"
 
-SLYTAGSPLIT: Optional[Dict[str, List[str]]] = None
+SLYTAGSPLIT: Optional[Dict[str, List[str]]] = {
+    "classification sets": ["benign", "malignant", "normal"]
+}
 TAGS: List[str] = None
 
 ##################################
