@@ -1,4 +1,4 @@
-**Breast Ultrasound Images** is a dataset for semantic segmentation and object detection tasks. It is used in the medical industry. 
+**Breast Ultrasound Images** is a dataset for semantic segmentation and classification tasks. It is used in the medical industry. 
 
 The dataset consists of 780 images with 647 labeled objects belonging to 2 different classes including *benign* and *malignant*.
 
