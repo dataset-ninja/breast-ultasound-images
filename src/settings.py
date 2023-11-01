@@ -60,7 +60,7 @@ AUTHORS: Optional[List[str]] = [
     "Hussien Khaled",
     "Aly Fahmy",
 ]
-AUTHORS_CONTACTS: Optional[List[str]] = ["tjeerd.dijkstra@tuebingen.mpg.de"]
+AUTHORS_CONTACTS: Optional[List[str]] = ["https://github.com/aryashah2k", "https://www.linkedin.com/in/arya--shah"]
 
 ORGANIZATION_NAME: Optional[Union[str, List[str]]] = "Cairo University, Egypt"
 ORGANIZATION_URL: Optional[Union[str, List[str]]] = "https://cu.edu.eg/Home"
