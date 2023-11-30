@@ -1,6 +1,6 @@
 Dataset **Breast Ultrasound Images** can be downloaded in [Supervisely format](https://developer.supervisely.com/api-references/supervisely-annotation-json-format):
 
- [Download](https://assets.supervisely.com/supervisely-supervisely-assets-public/teams_storage/w/0/k3/iS2Fhf0ZTu3PL7MNhuNEsNeMbp2yp81pOT4tNCVdGtNpAWf1OEOORv3zK3xSclYif7EIcvGFmvA7LPVdPMV1UleoYdBguZlUfGoK5tcFdM4HRygXA3iEvAkUdGnz.tar)
+ [Download](https://www.dropbox.com/scl/fi/3e1zhl4oiqavaaz4osrwb/breast-ultrasound-images-DatasetNinja.tar?rlkey=d4k0zqdw8ozwnbw3chtukzv5w&dl=1)
 
 As an alternative, it can be downloaded with *dataset-tools* package:
 ``` bash
